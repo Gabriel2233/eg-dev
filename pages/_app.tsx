@@ -1,4 +1,7 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { AuthProvider } from "../src/firebaseLib/auth";
+
+import "draft-js/dist/Draft.css";
 
 const colors = {
   yellow: {
@@ -11,9 +14,11 @@ const theme = extendTheme({ colors });
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <AuthProvider>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </AuthProvider>
   );
 }
 

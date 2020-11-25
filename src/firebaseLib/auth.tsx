@@ -16,7 +16,7 @@ type AppUser = {
 type IAuthContext = {
   user: AppUser | null;
   loading: boolean;
-  signinWithFacebook(redirect?: string): Promise<void>;
+  signinWithGitHub(redirect?: string): Promise<void>;
   signinWithGoogle(redirect?: string): Promise<void>;
   signOut(): Promise<void>;
 };
@@ -60,7 +60,7 @@ function useProvideAuth() {
     }
   };
 
-  const signinWithFacebook = async (redirect: string) => {
+  const signinWithGitHub = async (redirect: string) => {
     setLoading(true);
 
     try {
@@ -113,7 +113,7 @@ function useProvideAuth() {
   return {
     user,
     loading,
-    signinWithFacebook,
+    signinWithGitHub,
     signinWithGoogle,
     signOut,
   };
