@@ -1,89 +1,70 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
-import { chakra, Flex, CodeProps } from "@chakra-ui/react";
-import { RichButton } from "./RichButton";
+import React, { useCallback, useMemo, useState } from "react";
+import { chakra, Code } from "@chakra-ui/react";
 
-import { createEditor, Editor, Node, Transforms } from "slate";
+import { createEditor, Node, Text } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
+import { RichToolbar } from "./RichToolbar";
+import { RichComponents } from "../utils/slateUtils";
+
+import { FiBold, FiCode, FiItalic, FiUnderline } from "react-icons/fi";
+import { AiOutlineOrderedList, AiOutlineUnorderedList } from "react-icons/ai";
+import { GrBlockQuote } from "react-icons/gr";
+import { BiHeading } from "react-icons/bi";
 
 export const DescriptionRichEditor = () => {
-  const editor = useMemo(() => withReact(createEditor()), []);
-
-  const [value, setValue] = useState([
+  const [value, setValue] = useState<Node[]>([
     {
       type: "paragraph",
-      children: [{ text: "A line of text in a paragraph." }],
+      children: [{ text: "This is editable " }],
     },
   ]);
-
-  const renderElement = useCallback((props) => {
-    switch (props.element.type) {
-      case "code":
-        return <CodeElement {...props} />;
-      default:
-        return <DefaultElement {...props} />;
-    }
-  }, []);
-
-  const toggleCode = (e: FormEvent) => {
-    e.preventDefault();
-
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === "code",
-    });
-
-    Transforms.setNodes(
-      editor,
-      { type: match ? "paragraph" : "code" },
-      { match: (n) => Editor.isBlock(editor, n) }
-    );
-  };
+  const renderElement = useCallback(
+    (props) => <RichComponents.Element {...props} />,
+    []
+  );
+  const renderLeaf = useCallback(
+    (props) => <RichComponents.Leaf {...props} />,
+    []
+  );
+  const editor = useMemo(() => withReact(createEditor()), []);
 
   return (
-    <chakra.div
-      maxH="300px"
-      w="full"
-      borderWidth={1}
-      borderColor="gray.200"
-      rounded="4px"
-      _focus={{ borderColor: "yellow.400" }}
-      p={6}
-    >
+    <>
       <Slate
         editor={editor}
         value={value}
         onChange={(newValue) => setValue(newValue as any)}
       >
-        <Flex w="full" align="center" justify="center">
-          <RichButton onClick={(e) => toggleCode(e)}>{"{ }"}</RichButton>
-        </Flex>
-        <Editable
-          renderElement={renderElement}
-          onKeyDown={(event) => {
-            if (event.key === "&") {
-              event.preventDefault();
-              editor.insertText("and");
-            }
-          }}
-        />
+        <RichToolbar>
+          <RichComponents.MarkButton format="bold" icon={FiBold} />
+          <RichComponents.MarkButton format="italic" icon={FiItalic} />
+          <RichComponents.MarkButton format="underline" icon={FiUnderline} />
+          <RichComponents.MarkButton format="code" icon={FiCode} />
+
+          <RichComponents.BlockButton format="heading-one" icon={BiHeading} />
+          <RichComponents.BlockButton
+            format="numbered-list"
+            icon={AiOutlineOrderedList}
+          />
+          <RichComponents.BlockButton
+            format="bulleted-list"
+            icon={AiOutlineUnorderedList}
+          />
+        </RichToolbar>
+
+        <chakra.div
+          maxH="300px"
+          overflowY="auto"
+          w="full"
+          borderWidth={1}
+          borderColor="gray.200"
+          roundedBottom="4px"
+          _focus={{ borderColor: "yellow.400" }}
+          p={4}
+        >
+          <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
+        </chakra.div>
       </Slate>
-    </chakra.div>
+    </>
   );
-};
-
-const CodeElement = (props: HTMLPreElement) => {
-  return (
-    <pre {...props.attributes}>
-      <code>{props.children}</code>
-    </pre>
-  );
-};
-
-const DefaultElement = (props: HTMLParagraphElement) => {
-  return <p {...props.attributes}>{props.children}</p>;
 };
