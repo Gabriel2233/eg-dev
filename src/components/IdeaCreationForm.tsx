@@ -12,54 +12,54 @@ import { FiPlus, FiTrash } from "react-icons/fi";
 import { DescriptionRichEditor } from "./DescriptionRichEditor";
 import { InputElement } from "./InputElement";
 
-import { v4 as uuidv4 } from "uuid";
-
 import { BiCheckCircle } from "react-icons/bi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Node } from "slate";
 
 type TechInput = {
   name: string;
 };
 
 export const IdeaCreationForm = () => {
-  const [techCount, setTechCount] = useState(1);
-
-  const [techInputs, setTechInputs] = useState<Array<TechInput>>([
+  const [editorValue, setEditorValue] = useState<Node[]>([
     {
-      name: `tech-${techCount}`,
+      type: "paragraph",
+      children: [{ text: "Type something here..." }],
     },
   ]);
 
-  const incrementTech = () => {
-    setTechCount(techCount + 1);
+  const onEditorChange = (newValue: Node[]) => setEditorValue(newValue);
 
-    return techCount;
-  };
+  const [techInputs, setTechInputs] = useState<Array<TechInput>>([
+    {
+      name: `tech`,
+    },
+  ]);
 
   const addTech = () => {
-    incrementTech();
-
-    setTechInputs((prevState) => [...prevState, { name: `tech-${techCount}` }]);
+    setTechInputs((prevState) => [...prevState, { name: `tech` }]);
   };
 
-  const deleteTech = (techId: string) => {
+  const deleteTech = (index: number) => {
     if (techInputs.length === 1) {
-      alert("One tech is required");
+      alert("One is required");
     } else {
-      const updatedTechList = techInputs.filter((tech) => tech.name !== techId);
+      const techArrayIndexes = techInputs.filter(
+        (tech) => techInputs.indexOf(tech) === index
+      );
 
-      setTechInputs(updatedTechList);
+      setTechInputs(techArrayIndexes);
     }
   };
 
   const { handleSubmit, errors, register } = useForm();
 
   const onCreate = (data) => {
-    console.log(data);
+    console.log(data, editorValue);
   };
 
   return (
@@ -77,7 +77,7 @@ export const IdeaCreationForm = () => {
 
         <InputElement placeholder="Name" register={register} name="techName" />
 
-        <DescriptionRichEditor />
+        <DescriptionRichEditor value={editorValue} onChange={onEditorChange} />
 
         <Select
           size="lg"
@@ -87,25 +87,25 @@ export const IdeaCreationForm = () => {
           _focus={{ borderColor: "yellow.400" }}
           placeholder="Select Difficulty"
         >
-          <option value="option1">Easy</option>
-          <option value="option2">Medium</option>
-          <option value="option3">Hard</option>
+          <option value="Easy">Easy</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Hard">Hard</option>
         </Select>
 
         <HeadingElement>Technologies</HeadingElement>
 
-        {techInputs.map((input) => (
-          <Flex w="full" align="center" key={input.name}>
+        {techInputs.map((input, index) => (
+          <Flex w="full" align="center" key={index}>
             <InputElement
               placeholder="Tech"
-              name={input.name}
+              name={`techs.${index}`}
               register={register}
             />
             <IconButton
               aria-label="Delete"
               icon={<Icon as={FiTrash} color="red.500" />}
               mx={2}
-              onClick={() => deleteTech(input.name)}
+              onClick={() => deleteTech(index)}
             />
           </Flex>
         ))}

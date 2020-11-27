@@ -8,16 +8,15 @@ import { RichComponents } from "../utils/slateUtils";
 
 import { FiBold, FiCode, FiItalic, FiUnderline } from "react-icons/fi";
 import { AiOutlineOrderedList, AiOutlineUnorderedList } from "react-icons/ai";
-import { GrBlockQuote } from "react-icons/gr";
 import { BiHeading } from "react-icons/bi";
 
-export const DescriptionRichEditor = () => {
-  const [value, setValue] = useState<Node[]>([
-    {
-      type: "paragraph",
-      children: [{ text: "This is editable " }],
-    },
-  ]);
+export const DescriptionRichEditor = ({
+  value,
+  onChange,
+}: {
+  value: Node[];
+  onChange(newValue: Node[]): void;
+}) => {
   const renderElement = useCallback(
     (props) => <RichComponents.Element {...props} />,
     []
@@ -30,11 +29,7 @@ export const DescriptionRichEditor = () => {
 
   return (
     <>
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={(newValue) => setValue(newValue as any)}
-      >
+      <Slate editor={editor} value={value} onChange={onChange}>
         <RichToolbar>
           <RichComponents.MarkButton format="bold" icon={FiBold} />
           <RichComponents.MarkButton format="italic" icon={FiItalic} />
