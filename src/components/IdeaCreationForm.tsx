@@ -28,7 +28,7 @@ export const IdeaCreationForm = () => {
   const [editorValue, setEditorValue] = useState<Node[]>([
     {
       type: "paragraph",
-      children: [{ text: "Type something here..." }],
+      children: [{ text: "Describe your idea freely" }],
     },
   ]);
 
@@ -76,6 +76,12 @@ export const IdeaCreationForm = () => {
         <HeadingElement>About</HeadingElement>
 
         <InputElement placeholder="Name" register={register} name="techName" />
+
+        <InputElement
+          placeholder="Brief Description"
+          register={register}
+          name="briefDescription"
+        />
 
         <DescriptionRichEditor value={editorValue} onChange={onEditorChange} />
 
@@ -139,12 +145,12 @@ export const IdeaCreationForm = () => {
 
         <InputElement
           placeholder="Demo URL"
-          name="demoUrl"
+          name="demo.demoUrl"
           register={register}
         />
         <InputElement
           placeholder="Demo Placeholder"
-          name="demoPlaceholder"
+          name="demo.demoPlaceholder"
           register={register}
         />
 

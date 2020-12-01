@@ -12,7 +12,7 @@ export const IdeaCard = () => {
       px={2}
       py={6}
       rounded="0px"
-      _last={{ roundedBottom: "8px" }}
+      _last={{ roundedBottom: "8px", mb: "6rem" }}
       backgroundColor="white"
       borderWidth={0.5}
       borderColor="gray.200"

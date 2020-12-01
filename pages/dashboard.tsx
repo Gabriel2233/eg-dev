@@ -1,23 +1,22 @@
-import { Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { DashboardHeader } from "../src/components/DashboardHeader";
 import { IdeaCard } from "../src/components/IdeaCard";
-import { VerticalLayout } from "../src/components/VerticalLayout";
 
 export default function Dashboard() {
   return (
-    <VerticalLayout>
+    <Box bg="gray.100" h="100%">
       <DashboardHeader />
 
       <Flex
-        w="full"
+        m="0 auto"
         align="center"
-        justify="center"
         flexDir="column"
-        background="gray.100"
+        maxW="1250px"
+        px={[0, 8, 8]}
       >
         <Flex
-          mt={[null, null, "4rem"]}
           w={["100%", null, "70%"]}
+          mt={[null, null, "3rem"]}
           p={2}
           roundedTop="8px"
           background="gray.200"
@@ -38,7 +37,12 @@ export default function Dashboard() {
         <IdeaCard />
         <IdeaCard />
         <IdeaCard />
+        <IdeaCard />
+        <IdeaCard />
+        <IdeaCard />
+        <IdeaCard />
+        <IdeaCard />
       </Flex>
-    </VerticalLayout>
+    </Box>
   );
 }

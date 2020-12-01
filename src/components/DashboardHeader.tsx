@@ -9,17 +9,20 @@ export const DashboardHeader = () => {
       align="center"
       justify="space-between"
       p={4}
+      backgroundColor="white"
       borderTopWidth={4}
       borderTopColor="yellow.300"
       borderBottomWidth={1}
       borderBottomColor="gray.200"
     >
       <Flex align="center">
-        <Icon as={AiOutlineCode} mx={1} fontSize="33px" />
+        <Link href="/dashboard">
+          <Icon cursor="pointer" as={AiOutlineCode} mx={1} fontSize="33px" />
+        </Link>
 
-        <Link href="/my-links">
+        <Link href="/explore">
           <ChakraLink size="sm" mx={4}>
-            Ideas
+            Explore
           </ChakraLink>
         </Link>
 
