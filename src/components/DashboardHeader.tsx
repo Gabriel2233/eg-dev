@@ -11,7 +11,7 @@ export const DashboardHeader = () => {
       p={4}
       backgroundColor="white"
       borderTopWidth={4}
-      borderTopColor="yellow.300"
+      borderTopColor="red.400"
       borderBottomWidth={1}
       borderBottomColor="gray.200"
     >

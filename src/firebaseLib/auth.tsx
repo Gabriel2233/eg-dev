@@ -3,6 +3,7 @@ import Router from "next/router";
 import cookie from "js-cookie";
 
 import firebase from "./initFirebase";
+import { getPrisma } from "../utils/prismaUtils";
 
 type AppUser = {
   uid: string;

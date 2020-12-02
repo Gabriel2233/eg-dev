@@ -30,7 +30,7 @@ export const ExploreIdeaCard = () => {
           Easy
         </Badge>
       </Heading>
-      <Divider p={1} bg="yellow.400" w="10%" mx={4} rounded="8px" />
+      <Divider p={1} bg="red.400" w="10%" mx={4} rounded="8px" />
 
       <Flex w="full" align="center" justify="start" flexDir="column">
         <HStack spacing={4} my={6}>
@@ -46,7 +46,7 @@ export const ExploreIdeaCard = () => {
       <Button
         d="flex"
         alignSelf="flex-end"
-        colorScheme="yellow"
+        colorScheme="red"
         variant="ghost"
         rightIcon={<Icon as={FiArrowRight} />}
         m={4}

@@ -2,9 +2,9 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AuthProvider } from "../src/firebaseLib/auth";
 
 const colors = {
-  yellow: {
-    300: "#ffd500",
-    400: "#ffc300",
+  red: {
+    400: "#d90429",
+    500: "#ef233c",
   },
 };
 

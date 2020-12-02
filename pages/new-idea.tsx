@@ -15,7 +15,7 @@ export default function NewIdeaCreator() {
         justify="space-between"
         p={4}
         borderTopWidth={4}
-        borderTopColor="yellow.400"
+        borderTopColor="red.400"
       >
         <Flex align="center">
           <Icon as={AiOutlineCode} mx={4} fontSize="33px" />

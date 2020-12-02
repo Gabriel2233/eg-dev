@@ -90,7 +90,7 @@ export const IdeaCreationForm = () => {
           my={6}
           name="ideaDifficulty"
           ref={register}
-          _focus={{ borderColor: "yellow.400" }}
+          _focus={{ borderColor: "red.400" }}
           placeholder="Select Difficulty"
         >
           <option value="Easy">Easy</option>
@@ -156,14 +156,15 @@ export const IdeaCreationForm = () => {
 
         <Button
           w="125px"
-          bg="yellow.300"
-          _hover={{ bg: "yellow.400" }}
+          bg="red.500"
+          _hover={{ bg: "red.400" }}
+          color="white"
           mt={6}
           d="flex"
           alignSelf="flex-end"
           type="submit"
         >
-          <Icon as={BiCheckCircle} mr={1} />
+          <Icon color="white" as={BiCheckCircle} mr={1} />
           Create
         </Button>
       </Flex>
