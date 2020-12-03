@@ -3,24 +3,10 @@ import Router from "next/router";
 import cookie from "js-cookie";
 
 import firebase from "./initFirebase";
-import { getPrisma } from "../utils/prismaUtils";
 
-type AppUser = {
-  uid: string;
-  email: string;
-  name: string;
-  token: string;
-  provider: string;
-  photoUrl: string;
-};
+import "firebase/auth";
 
-type IAuthContext = {
-  user: AppUser | null;
-  loading: boolean;
-  signinWithGitHub(redirect?: string): Promise<void>;
-  signinWithGoogle(redirect?: string): Promise<void>;
-  signOut(): Promise<void>;
-};
+import { IAuthContext } from "../../types/types";
 
 const authContext = createContext<IAuthContext>({} as IAuthContext);
 
@@ -43,6 +29,10 @@ function useProvideAuth() {
       const { token, ...userWithoutToken } = user;
 
       //create User in DB
+      await fetch("/api/user/create", {
+        method: "POST",
+        body: JSON.stringify(userWithoutToken),
+      });
 
       setUser(user);
 
@@ -120,12 +110,12 @@ function useProvideAuth() {
   };
 }
 
-const formatUser = async (user: firebase.User) => {
+const formatUser = async (user: any) => {
   return {
     uid: user.uid,
     email: user.email,
     name: user.displayName,
-    token: user.refreshToken,
+    token: user.xa,
     provider: user.providerData[0].providerId,
     photoUrl: user.photoURL,
   };

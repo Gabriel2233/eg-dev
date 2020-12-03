@@ -25,10 +25,12 @@
     "react-icons": "^3.11.0",
     "slate": "^0.59.0",
     "slate-react": "^0.59.0",
+    "swr": "^0.3.9",
     "yup": "^0.31.0"
   },
   "devDependencies": {
     "@prisma/cli": "2.12.1",
+    "@types/js-cookie": "^2.2.6",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@types/yup": "^0.29.9",

@@ -7,7 +7,7 @@ import {
   Select,
   Tooltip,
 } from "@chakra-ui/react";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { DescriptionRichEditor } from "./DescriptionRichEditor";
 import { InputElement } from "./InputElement";
@@ -16,51 +16,27 @@ import { BiCheckCircle } from "react-icons/bi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { Idea, TechInput } from "../../types/types";
 import { Node } from "slate";
 
-type TechInput = {
-  name: string;
+type Props = {
+  onCreate(data: Idea): Promise<void>;
+  editorValue: Node[];
+  onEditorChange(newValue: Node[]): void;
+  techInputs: TechInput[];
+  addTech(): void;
+  deleteTech(techIndex: number): void;
 };
 
-export const IdeaCreationForm = () => {
-  const [editorValue, setEditorValue] = useState<Node[]>([
-    {
-      type: "paragraph",
-      children: [{ text: "Describe your idea freely" }],
-    },
-  ]);
-
-  const onEditorChange = (newValue: Node[]) => setEditorValue(newValue);
-
-  const [techInputs, setTechInputs] = useState<Array<TechInput>>([
-    {
-      name: `tech`,
-    },
-  ]);
-
-  const addTech = () => {
-    setTechInputs((prevState) => [...prevState, { name: `tech` }]);
-  };
-
-  const deleteTech = (index: number) => {
-    if (techInputs.length === 1) {
-      alert("One is required");
-    } else {
-      const techArrayIndexes = techInputs.filter(
-        (tech) => techInputs.indexOf(tech) === index
-      );
-
-      setTechInputs(techArrayIndexes);
-    }
-  };
-
-  const { handleSubmit, errors, register } = useForm();
-
-  const onCreate = (data) => {
-    console.log(data, editorValue);
-  };
+export const IdeaCreationForm = ({
+  onCreate,
+  editorValue,
+  onEditorChange,
+  techInputs,
+  addTech,
+  deleteTech,
+}: Props) => {
+  const { errors, handleSubmit, register } = useForm();
 
   return (
     <FormContainer>
@@ -175,7 +151,7 @@ export const IdeaCreationForm = () => {
 const FormContainer = ({ children }: { children: ReactNode }) => {
   return (
     <Flex
-      w={["100%", null, "50%"]}
+      w={["100%", null, "70%"]}
       align="start"
       justify="center"
       flexDir="column"

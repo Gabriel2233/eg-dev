@@ -2,30 +2,32 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { auth } from "../../../src/firebaseLib/firebase-admin";
 import { getPrisma } from "../../../src/utils/prismaUtils";
 
-const prisma = getPrisma();
+import Cookie from "js-cookie";
+import { Idea } from "../../../types/types";
 
-type Body = {
-  name: string;
-  briefDescription: string;
-  richDescription: string;
-  difficulty: string;
-  techs: Array<string>;
-  demoUrl?: string;
-  demoPlaceholder?: string;
-};
+const prisma = getPrisma();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { uid } = await auth.verifyIdToken(req.headers.tk);
+    const auth = req.cookies;
 
-    if (uid === null) throw new Error("No uid");
-    const body: Body = req.body;
+    if (!auth["dil-auth"]) throw new Error("Not Authenticated");
 
-    const newIdea = await prisma.idea.create({
+    const body = JSON.parse(req.body);
+
+    await prisma.idea.create({
       data: {
-        ...body,
+        name: body.techName,
+        briefDescription: body.briefDescription,
+        richDescription: body.richDescription,
+        difficulty: body.ideaDifficulty,
+        techs: body.techs,
+        demo_url: body.demo.demoUrl,
+        demo_placeholder: body.demo.demoPlaceholder,
       },
     });
+
+    await prisma.$disconnect();
 
     return res.json({ message: "Success" });
   } catch (err) {
