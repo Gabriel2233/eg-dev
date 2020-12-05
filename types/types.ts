@@ -28,6 +28,7 @@ export type TechInput = {
 };
 
 export type Idea = {
+  id: number;
   name: string;
   briefDescription: string;
   richDescription: string;
