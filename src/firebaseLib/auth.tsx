@@ -7,6 +7,7 @@ import firebase from "./initFirebase";
 import "firebase/auth";
 
 import { IAuthContext } from "../../types/types";
+import { auth } from "firebase-admin";
 
 const authContext = createContext<IAuthContext>({} as IAuthContext);
 
@@ -110,12 +111,14 @@ function useProvideAuth() {
   };
 }
 
-const formatUser = async (user: any) => {
+export const formatUser = async (user: firebase.User) => {
+  const userToken = await user.getIdToken();
+
   return {
     uid: user.uid,
     email: user.email,
     name: user.displayName,
-    token: user.xa,
+    token: userToken,
     provider: user.providerData[0].providerId,
     photoUrl: user.photoURL,
   };

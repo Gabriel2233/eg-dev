@@ -15,7 +15,9 @@ export default function Home() {
           </Button>
         </Link>
 
-        <MainButton>Explore</MainButton>
+        <Link href="/explore">
+          <MainButton>Explore</MainButton>
+        </Link>
       </Header>
 
       <Flex w="full" align="center" justify="center" flexDir="column" mt="4rem">

@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const ideas = await prisma.idea.findMany({
       take: body.take,
       include: {
-        User: true,
+        user: true,
       },
     });
 

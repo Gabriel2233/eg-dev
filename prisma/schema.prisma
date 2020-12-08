@@ -25,6 +25,6 @@ model Idea {
   techs            String[]
   demo_url         String?
   demo_placeholder String?
-  User             User?    @relation(fields: [userUid], references: [uid])
-  userUid          String?
+  user             User     @relation(fields: [userUid], references: [uid])
+  userUid          String   @unique
 }

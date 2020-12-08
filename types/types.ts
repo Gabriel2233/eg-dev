@@ -24,7 +24,7 @@ export type IAuthContext = {
 };
 
 export type TechInput = {
-  name: string;
+  mark: string;
 };
 
 export type Idea = {
@@ -34,6 +34,10 @@ export type Idea = {
   richDescription: string;
   difficulty: string;
   techs: Array<string>;
-  demoUrl?: string;
-  demoPlaceholder?: string;
+  demo: {
+    demo_url?: string;
+    demo_placeholder?: string;
+  };
+  user: AppUser;
+  userUid: string;
 };

@@ -1,12 +1,13 @@
 import { Box, CloseButton, Flex, Icon } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { AiOutlineCode } from "react-icons/ai";
 import { Node } from "slate";
 import { IdeaCreationForm } from "../src/components/IdeaCreationForm";
 import { useAuth } from "../src/firebaseLib/auth";
 import { Idea, TechInput } from "../types/types";
+import { v4 as uuidv4 } from "uuid";
+import { empty } from "@prisma/client";
 
 export default function NewIdeaCreator() {
   const { back } = useRouter();
@@ -24,32 +25,32 @@ export default function NewIdeaCreator() {
 
   const [techInputs, setTechInputs] = useState<Array<TechInput>>([
     {
-      name: `tech`,
+      mark: uuidv4(),
     },
   ]);
 
   const addTech = () => {
-    setTechInputs((prevState) => [...prevState, { name: `tech` }]);
+    setTechInputs((prevState) => [...prevState, { mark: uuidv4() }]);
   };
 
-  const deleteTech = (index: number) => {
-    if (techInputs.length === 1) {
-      alert("One is required");
-    } else {
-      const techArrayIndexes = techInputs.filter(
-        (tech) => techInputs.indexOf(tech) === index
-      );
+  const deleteTech = (mark: string) => {
+    const techArrayIndexes = techInputs.filter((tech) => tech.mark !== mark);
 
-      setTechInputs(techArrayIndexes);
-    }
+    setTechInputs(techArrayIndexes);
   };
 
   const onCreate = async (data: Idea) => {
+    const filteredTechs = data.techs.filter((tech) => tech !== undefined);
+
     const editorStatetoString = JSON.stringify(editorValue);
+    const { token, ...userData } = user;
 
     const body = {
-      richDescription: editorStatetoString,
       ...data,
+      techs: filteredTechs,
+      richDescription: editorStatetoString,
+      user: userData,
+      userUid: userData.uid,
     };
 
     try {
@@ -57,12 +58,10 @@ export default function NewIdeaCreator() {
         method: "POST",
         body: JSON.stringify(body),
       });
-
       const data = await res.json();
-
-      alert(data.message);
+      console.log(data);
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   };
 

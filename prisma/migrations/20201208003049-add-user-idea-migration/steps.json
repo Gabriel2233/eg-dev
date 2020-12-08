@@ -190,9 +190,9 @@
     {
       "tag": "CreateField",
       "model": "Idea",
-      "field": "User",
+      "field": "user",
       "type": "User",
-      "arity": "Optional"
+      "arity": "Required"
     },
     {
       "tag": "CreateDirective",
@@ -200,7 +200,7 @@
         "path": {
           "tag": "Field",
           "model": "Idea",
-          "field": "User"
+          "field": "user"
         },
         "directive": "relation"
       }
@@ -212,7 +212,7 @@
         "path": {
           "tag": "Field",
           "model": "Idea",
-          "field": "User"
+          "field": "user"
         },
         "directive": "relation"
       },
@@ -226,7 +226,7 @@
         "path": {
           "tag": "Field",
           "model": "Idea",
-          "field": "User"
+          "field": "user"
         },
         "directive": "relation"
       },
@@ -238,7 +238,18 @@
       "model": "Idea",
       "field": "userUid",
       "type": "String",
-      "arity": "Optional"
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Idea",
+          "field": "userUid"
+        },
+        "directive": "unique"
+      }
     }
   ]
 }

@@ -25,7 +25,7 @@ type Props = {
   onEditorChange(newValue: Node[]): void;
   techInputs: TechInput[];
   addTech(): void;
-  deleteTech(techIndex: number): void;
+  deleteTech(mark: string): void;
 };
 
 export const IdeaCreationForm = ({
@@ -51,7 +51,7 @@ export const IdeaCreationForm = ({
       >
         <HeadingElement>About</HeadingElement>
 
-        <InputElement placeholder="Name" register={register} name="techName" />
+        <InputElement placeholder="Name" register={register} name="name" />
 
         <InputElement
           placeholder="Brief Description"
@@ -64,7 +64,7 @@ export const IdeaCreationForm = ({
         <Select
           size="lg"
           my={6}
-          name="ideaDifficulty"
+          name="difficulty"
           ref={register}
           _focus={{ borderColor: "red.400" }}
           placeholder="Select Difficulty"
@@ -76,18 +76,24 @@ export const IdeaCreationForm = ({
 
         <HeadingElement>Technologies</HeadingElement>
 
-        {techInputs.map((input, index) => (
-          <Flex w="full" align="center" key={index}>
+        <InputElement
+          placeholder="Tech - One required"
+          name="techs.0"
+          register={register}
+        />
+
+        {techInputs.map((tech, idx) => (
+          <Flex w="full" align="center" key={tech.mark}>
             <InputElement
               placeholder="Tech"
-              name={`techs.${index}`}
+              name={`techs.${idx + 1}`}
               register={register}
             />
             <IconButton
               aria-label="Delete"
               icon={<Icon as={FiTrash} color="red.500" />}
               mx={2}
-              onClick={() => deleteTech(index)}
+              onClick={() => deleteTech(tech.mark)}
             />
           </Flex>
         ))}
@@ -121,12 +127,12 @@ export const IdeaCreationForm = ({
 
         <InputElement
           placeholder="Demo URL"
-          name="demo.demoUrl"
+          name="demo.demo_url"
           register={register}
         />
         <InputElement
           placeholder="Demo Placeholder"
-          name="demo.demoPlaceholder"
+          name="demo.demo_placeholder"
           register={register}
         />
 
@@ -151,7 +157,7 @@ export const IdeaCreationForm = ({
 const FormContainer = ({ children }: { children: ReactNode }) => {
   return (
     <Flex
-      w={["100%", null, "70%"]}
+      w={["100%", null, "60%"]}
       align="start"
       justify="center"
       flexDir="column"

@@ -68,7 +68,7 @@ const Element = ({ attributes, children, element }) => {
       return <UnorderedList {...attributes}>{children}</UnorderedList>;
     case "heading-one":
       return (
-        <Heading size="xl" {...attributes}>
+        <Heading size="lg" {...attributes}>
           {children}
         </Heading>
       );
@@ -90,7 +90,7 @@ const Leaf = ({ attributes, children, leaf }) => {
 
   if (leaf.code) {
     children = (
-      <Code p={2} bg="blue.800" color="white">
+      <Code p={2} bg="blue.800" color="white" w="full" m={0} rounded="0px">
         {children}
       </Code>
     );
