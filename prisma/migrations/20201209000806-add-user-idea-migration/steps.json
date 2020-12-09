@@ -239,17 +239,6 @@
       "field": "userUid",
       "type": "String",
       "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Idea",
-          "field": "userUid"
-        },
-        "directive": "unique"
-      }
     }
   ]
 }

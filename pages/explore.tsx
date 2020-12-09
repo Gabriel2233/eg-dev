@@ -12,6 +12,8 @@ import {
   Text,
   Tag,
   TagLabel,
+  Link as ChakraLink,
+  Button,
 } from "@chakra-ui/react";
 import { useState, useCallback, useMemo, ReactNode } from "react";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
@@ -24,11 +26,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { RichComponents } from "../src/utils/slateUtils";
 import { Editable, Slate, withReact } from "slate-react";
 import { createEditor, Node } from "slate";
-import { MdCheckCircle } from "react-icons/md";
 import { Idea } from "../types/types";
 import { SideHelper } from "../src/components/SideHelper";
-import { AiOutlineCode } from "react-icons/ai";
 import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
+
+import Link from "next/link";
 
 const fetcher = async (url: string) => {
   try {
@@ -84,21 +86,7 @@ export default function Explore() {
       ? "yellow"
       : "red";
 
-  //const listVariants = {
-  //hidden: (i) => ({
-  //opacity: 0,
-  //y: -50 * i,
-  //}),
-
-  //visible: (i) => ({
-  //opacity: 1,
-  //y: 0,
-  //transition: {
-  //delay: i * 0.05,
-  //},
-  //}),
-  //};
-  //
+  const CustomFlex = motion.custom(Flex);
 
   return (
     <MainContainer back={back} iterator={iterator}>
@@ -112,6 +100,8 @@ export default function Explore() {
               icon={<Icon as={BiLeftArrowAlt} />}
               disabled={prevDisabled}
               onClick={getPreviousIdea}
+              pos="fixed"
+              top="50%"
             />
           </SideHelper>
 
@@ -128,36 +118,63 @@ export default function Explore() {
               </Flex>
 
               <Flex w="full" align="center" justify="start" my={2}>
-                <Text mx={2} color="gray.600">
-                  By: {data[iterator].user.name}
-                </Text>
+                <Link href={`/users/${data[iterator].user.uid}`}>
+                  <ChakraLink mx={2} color="gray.600">
+                    By: {data[iterator].user.name}
+                  </ChakraLink>
+                </Link>
               </Flex>
 
               <Flex w="full" align="center" justify="start" my={2}>
                 <Text mx={2} color="gray.600">
                   Technologies:
                 </Text>
-                {data[iterator].techs.map((tech: string) => (
-                  <Tag colorScheme="red" mx={1}>
-                    <TagLabel># {tech}</TagLabel>
-                  </Tag>
+
+                {data[iterator].techs.map((tech: string, i) => (
+                  <AnimatePresence custom={i}>
+                    <TechList tech={tech} />
+                  </AnimatePresence>
                 ))}
+              </Flex>
+
+              <Flex w="full" align="center" justify="start" my={2}>
+                {data[iterator].demo_url ? (
+                  <ChakraLink
+                    mx={2}
+                    color="gray.600"
+                    href={data[iterator].demo_url}
+                  >
+                    Demo: {data[iterator].demo_placeholder}
+                  </ChakraLink>
+                ) : (
+                  <Text mx={2} color="gray.600">
+                    Demo: Not Provided
+                  </Text>
+                )}
               </Flex>
             </Flex>
 
             <TopicContainer>
               <TopicHeader>About</TopicHeader>
-              <Flex
-                boxShadow="0 4px 14px 0 #ccc"
-                rounded="8px"
-                p={6}
-                w="full"
-                flexDir="column"
-              >
-                <ReadOnlyEditor
-                  value={JSON.parse(data[iterator].richDescription)}
-                />
-              </Flex>
+              <AnimatePresence>
+                <CustomFlex
+                  boxShadow="0 4px 14px 0 #ccc"
+                  rounded="8px"
+                  p={6}
+                  w="full"
+                  flexDir="column"
+                  initial={{ opacity: 0, y: 300 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    x: { type: "spring", damping: 300, stiffness: 30 },
+                    opacity: { duration: 0.2 },
+                  }}
+                >
+                  <ReadOnlyEditor
+                    value={JSON.parse(data[iterator].richDescription)}
+                  />
+                </CustomFlex>
+              </AnimatePresence>
             </TopicContainer>
           </Flex>
 
@@ -169,6 +186,8 @@ export default function Explore() {
               disabled={nextDisabled}
               icon={<Icon as={BiRightArrowAlt} />}
               onClick={getNextIdea}
+              pos="fixed"
+              top="50%"
             />
           </SideHelper>
         </Flex>
@@ -278,5 +297,19 @@ const TopicHeader = ({ children }: { children: ReactNode }) => {
     <Heading size="xl" my={6}>
       {children}
     </Heading>
+  );
+};
+
+const TechList = ({ tech }: { tech: string }) => {
+  return (
+    <Tag
+      as={motion.div}
+      colorScheme="red"
+      mx={1}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <TagLabel># {tech}</TagLabel>
+    </Tag>
   );
 };

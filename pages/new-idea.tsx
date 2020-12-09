@@ -1,4 +1,4 @@
-import { Box, CloseButton, Flex, Icon } from "@chakra-ui/react";
+import { Box, CloseButton, Flex, Icon, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineCode } from "react-icons/ai";
@@ -7,10 +7,10 @@ import { IdeaCreationForm } from "../src/components/IdeaCreationForm";
 import { useAuth } from "../src/firebaseLib/auth";
 import { Idea, TechInput } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
-import { empty } from "@prisma/client";
 
 export default function NewIdeaCreator() {
   const { back } = useRouter();
+  const toast = useToast();
 
   const { user } = useAuth();
 
@@ -59,9 +59,18 @@ export default function NewIdeaCreator() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      console.log(data);
+
+      toast({
+        title: "Success!",
+        status: "success",
+        duration: 2000,
+      });
     } catch (err) {
-      console.log(err.message);
+      toast({
+        title: "Error :(",
+        status: "error",
+        duration: 2000,
+      });
     }
   };
 

@@ -26,5 +26,5 @@ model Idea {
   demo_url         String?
   demo_placeholder String?
   user             User     @relation(fields: [userUid], references: [uid])
-  userUid          String   @unique
+  userUid          String   
 }
