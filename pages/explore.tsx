@@ -4,11 +4,7 @@ import {
   Icon,
   IconButton,
   Badge,
-  List,
-  ListItem,
-  ListIcon,
   FlexProps,
-  Avatar,
   Text,
   Tag,
   TagLabel,
@@ -26,27 +22,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import { RichComponents } from "../src/utils/slateUtils";
 import { Editable, Slate, withReact } from "slate-react";
 import { createEditor, Node } from "slate";
-import { Idea } from "../types/types";
 import { SideHelper } from "../src/components/SideHelper";
 import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
 
 import Link from "next/link";
-
-const fetcher = async (url: string) => {
-  try {
-    const res = await fetch(url);
-
-    const data: Idea = await res.json();
-
-    return data;
-  } catch (err) {
-    return err.message;
-  }
-};
+import { fetcher } from "../src/utils/fetcher";
+import { FiHeart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
 
 const TAKE = 200;
 
 export default function Explore() {
+  console.log("render");
+
   const [iterator, setIterator] = useState(0);
 
   const [back, setBack] = useState(false);
@@ -88,6 +76,15 @@ export default function Explore() {
 
   const CustomFlex = motion.custom(Flex);
 
+  const [liked, setLiked] = useState<boolean>(false);
+
+  const onIdeaLike = (e) => {
+    e.preventDefault();
+    setLiked(!liked);
+  };
+
+  const icon = liked ? FaHeart : FiHeart;
+
   return (
     <MainContainer back={back} iterator={iterator}>
       <Scrollbars>
@@ -106,52 +103,62 @@ export default function Explore() {
           </SideHelper>
 
           <Flex width="70%" p={8} flexDir="column">
-            <Flex w="full" flexDir="column">
-              <Flex align="center" justify="space-between" w="full">
-                <Heading size="2xl" py={6}>
-                  {data[iterator].name}
-                </Heading>
+            <Flex align="center" justify="space-between" w="full">
+              <Heading size="2xl" py={6}>
+                {data[iterator].name}
+              </Heading>
 
-                <Badge colorScheme={badgeScheme}>
-                  {data[iterator].difficulty}
-                </Badge>
-              </Flex>
+              <Badge colorScheme={badgeScheme}>
+                {data[iterator].difficulty}
+              </Badge>
+            </Flex>
 
-              <Flex w="full" align="center" justify="start" my={2}>
-                <Link href={`/users/${data[iterator].user.uid}`}>
-                  <ChakraLink mx={2} color="gray.600">
-                    By: {data[iterator].user.name}
-                  </ChakraLink>
-                </Link>
-              </Flex>
+            <Flex w="full" justify="space-between">
+              <div>
+                <Flex my={2}>
+                  <Link href={`/users/${data[iterator].user.uid}`}>
+                    <ChakraLink mx={2} color="gray.600">
+                      By: {data[iterator].user.name}
+                    </ChakraLink>
+                  </Link>
+                </Flex>
 
-              <Flex w="full" align="center" justify="start" my={2}>
-                <Text mx={2} color="gray.600">
-                  Technologies:
-                </Text>
-
-                {data[iterator].techs.map((tech: string, i) => (
-                  <AnimatePresence custom={i}>
-                    <TechList tech={tech} />
-                  </AnimatePresence>
-                ))}
-              </Flex>
-
-              <Flex w="full" align="center" justify="start" my={2}>
-                {data[iterator].demo_url ? (
-                  <ChakraLink
-                    mx={2}
-                    color="gray.600"
-                    href={data[iterator].demo_url}
-                  >
-                    Demo: {data[iterator].demo_placeholder}
-                  </ChakraLink>
-                ) : (
+                <Flex my={2}>
                   <Text mx={2} color="gray.600">
-                    Demo: Not Provided
+                    Technologies:
                   </Text>
-                )}
-              </Flex>
+
+                  {data[iterator].techs.map((tech: string, i) => (
+                    <AnimatePresence custom={i}>
+                      <TechListItem tech={tech} />
+                    </AnimatePresence>
+                  ))}
+                </Flex>
+
+                <Flex my={2}>
+                  {data[iterator].demo_url ? (
+                    <ChakraLink
+                      mx={2}
+                      color="gray.600"
+                      href={data[iterator].demo_url}
+                    >
+                      Demo: {data[iterator].demo_placeholder}
+                    </ChakraLink>
+                  ) : (
+                    <Text mx={2} color="gray.600">
+                      Demo: Not Provided
+                    </Text>
+                  )}
+                </Flex>
+              </div>
+
+              <IconButton
+                aria-label="Like Count"
+                variant="ghost"
+                icon={<Icon as={icon} />}
+                onClick={onIdeaLike}
+                color={liked ? "red.500" : "black"}
+              />
             </Flex>
 
             <TopicContainer>
@@ -233,7 +240,7 @@ const MainContainer = ({
   const MotionFlex = motion.custom(Flex);
 
   const variants = {
-    initial: (back) => {
+    initial: (back: boolean) => {
       return {
         x: back ? 1000 : -1000,
         opacity: 0,
@@ -243,7 +250,7 @@ const MainContainer = ({
       x: 0,
       opacity: 1,
     },
-    exit: (back) => {
+    exit: (back: boolean) => {
       return {
         x: back ? -1000 : +1000,
         opacity: 0,
@@ -267,7 +274,7 @@ const MainContainer = ({
         pos="fixed"
         transition={{
           x: { type: "spring", stiffness: 300, damping: 30 },
-          opacity: { duration: 0.5 },
+          opacity: { duration: 0.6 },
         }}
       >
         {children}
@@ -300,7 +307,7 @@ const TopicHeader = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const TechList = ({ tech }: { tech: string }) => {
+const TechListItem = ({ tech }: { tech: string }) => {
   return (
     <Tag
       as={motion.div}

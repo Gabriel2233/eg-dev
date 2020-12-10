@@ -48,16 +48,20 @@ export const DescriptionRichEditor = ({
         </RichToolbar>
 
         <chakra.div
+          h="200px"
           maxH="300px"
           overflowY="auto"
           w="full"
           borderWidth={1}
           borderColor="gray.200"
           roundedBottom="4px"
-          _focus={{ borderColor: "yellow.400" }}
           p={4}
         >
-          <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            placeholder="How will the app work, what are some tips and tricks to make this idea become reality..."
+          />
         </chakra.div>
       </Slate>
     </>

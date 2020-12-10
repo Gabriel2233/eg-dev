@@ -17,7 +17,12 @@ export default function NewIdeaCreator() {
   const [editorValue, setEditorValue] = useState<Node[]>([
     {
       type: "paragraph",
-      children: [{ text: "Describe your idea freely" }],
+      children: [
+        {
+          text:
+            "How will the app work? What are some tips and tricks to make this idea become reality...",
+        },
+      ],
     },
   ]);
 

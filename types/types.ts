@@ -41,3 +41,16 @@ export type Idea = {
   user: AppUser;
   userUid: string;
 };
+
+export type DbIdea = {
+  id: number;
+  name: string;
+  briefDescription: string;
+  richDescription: string;
+  difficulty: string;
+  techs: Array<string>;
+  demo_url?: string;
+  demo_placeholder?: string;
+  user: AppUser;
+  userUid: string;
+};

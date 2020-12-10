@@ -5,7 +5,7 @@ export const RichToolbar = ({ children }: { children: ReactNode }) => {
   return (
     <Grid
       w="full"
-      templateColumns={"repeat(auto-fit, minmax(25px, 1fr))"}
+      templateColumns={"repeat(auto-fit, minmax(60px, 1fr))"}
       roundedTop="4px"
       align="center"
       justify="start"
