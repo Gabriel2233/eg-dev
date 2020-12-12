@@ -10,8 +10,8 @@ import {
   Flex,
   Icon,
   Text,
-  Link,
   Badge,
+  Link as ChakraLink,
   Menu,
   MenuButton,
   MenuList,
@@ -26,6 +26,8 @@ import { HiCheckCircle, HiXCircle } from "react-icons/hi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiShare, FiTrash } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
+
+import Link from "next/link";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -42,7 +44,9 @@ export default function Dashboard() {
       <DashboardHeader />
 
       <Flex w="full" align="center" justify="center" mt="3rem">
-        {data ? (
+        {!data ? (
+          <h1>Loading</h1>
+        ) : (
           <Table size="md" p={8} bg="white" w="80%" rounded="10px">
             <Thead bg="gray.200">
               <Tr>
@@ -56,29 +60,35 @@ export default function Dashboard() {
             <Tbody>
               {data.map((idea, i) => (
                 <AnimatePresence custom={i}>
-                  <TableItem idea={idea} index={i} />
+                  <TableItem idea={idea} />
                 </AnimatePresence>
               ))}
             </Tbody>
           </Table>
-        ) : (
-          <h1>Loading data...</h1>
         )}
       </Flex>
     </Box>
   );
 }
 
-const TableItem = ({ idea, index }: { idea: DbIdea; index: number }) => {
+const TableItem = ({ idea }: { idea: DbIdea }) => {
   return (
     <>
       <Tr
+        overflow="hidden"
+        cursor="pointer"
         key={idea.id}
         as={motion.tr}
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
+        whileHover={{ x: 10, transition: { duration: 0.2 } }}
+        background="white"
       >
-        <Td fontWeight="bold">{idea.name}</Td>
+        <Td fontWeight="bold">
+          <ChakraLink>
+            <Link href={`/ideas/${idea.id}`}>{idea.name}</Link>
+          </ChakraLink>
+        </Td>
         <Td>
           <Badge
             colorScheme={
