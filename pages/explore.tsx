@@ -1,16 +1,4 @@
-import {
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Badge,
-  FlexProps,
-  Text,
-  Tag,
-  TagLabel,
-  Link as ChakraLink,
-  IconButtonProps,
-} from "@chakra-ui/react";
+import { Flex, Icon, IconButton } from "@chakra-ui/react";
 import { useState, ReactNode } from "react";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
 
@@ -22,12 +10,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SideHelper } from "../src/components/SideHelper";
 import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
 
-import Link from "next/link";
 import { fetcher } from "../src/utils/fetcher";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
-import { ReadOnlyEditor } from "../src/components/ReadOnlyEditor";
-import { DbIdea } from "../types/types";
 import {
   ArrowButton,
   EditorWrapper,
