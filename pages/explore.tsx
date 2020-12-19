@@ -1,108 +1,70 @@
-import { Flex, Icon, IconButton } from "@chakra-ui/react";
-import { useState, ReactNode } from "react";
+import { Button, Flex, Icon } from "@chakra-ui/react";
+import { useState, ReactNode, useEffect } from "react";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
-
-import useSWR from "swr";
 
 import { Scrollbars } from "react-custom-scrollbars";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { wrap } from "popmotion";
 import { SideHelper } from "../src/components/SideHelper";
-import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
 
-import { fetcher } from "../src/utils/fetcher";
-import { FiHeart } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
 import {
   ArrowButton,
   EditorWrapper,
+  FullIdea,
   IdeaIdentifier,
   IdeaInfoSection,
   RichTextContainer,
 } from "../src/components/IdeaMainConponents";
+import useSWR from "swr";
+import { DbIdea } from "../types/types";
+import { fetcher } from "../src/utils/fetcher";
+import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
+import { useFavorites } from "../src/contexts/FavoritesContext";
+import { FiArrowLeft, FiHeart } from "react-icons/fi";
+import { useRouter } from "next/router";
 
-const TAKE = 200;
+const TAKE = 100;
 
 export default function Explore() {
-  const [liked, setLiked] = useState(false);
+  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
 
-  const [iterator, setIterator] = useState(0);
-
-  const [back, setBack] = useState(false);
-
-  const { error, data } = useSWR(["/api/ideas/get", TAKE], fetcher);
+  const { error, data } = useSWR<DbIdea[]>(["/api/ideas/get", TAKE], fetcher);
 
   if (!data) return <ExploreSkeleton />;
-  if (error) return "Error";
+  if (error) return "Error...";
 
-  const getNextIdea = () => {
-    setBack(false);
+  const ideaIndex = wrap(0, data.length, page);
 
-    if (iterator === data.length - 1) {
-      return;
-    }
-    setIterator((prev) => prev + 1);
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
   };
 
-  const getPreviousIdea = () => {
-    setBack(true);
-
-    if (iterator === 0) {
-      return;
-    }
-    setIterator((prev) => prev - 1);
-  };
-
-  const currIterator = iterator;
-
-  const nextDisabled = currIterator >= data.length - 1;
-  const prevDisabled = currIterator <= 0;
-
-  const onIdeaLike = (e) => {
-    e.preventDefault();
-    setLiked(!liked);
-  };
-
-  const icon = liked ? FaHeart : FiHeart;
+  const router = useRouter();
 
   return (
-    <MainContainer back={back} iterator={iterator}>
+    <MainContainer direction={direction} page={page}>
       <Scrollbars>
         <Flex>
           <SideHelper>
+            <Button pos="fixed" top={0} m={6} onClick={() => router.back()}>
+              <Icon as={FiArrowLeft} mr={2} />
+              Back
+            </Button>
             <ArrowButton
               aria-label="Left"
               icon={<Icon as={BiLeftArrowAlt} />}
-              disabled={prevDisabled}
-              onClick={getPreviousIdea}
+              onClick={() => paginate(-1)}
             />
           </SideHelper>
 
-          <Flex width="70%" p={8} flexDir="column">
-            <IdeaIdentifier data={data[iterator]} />
-
-            <Flex w="full" justify="space-between">
-              <IdeaInfoSection data={data[iterator]} />
-              <IconButton
-                aria-label="Like Count"
-                variant="ghost"
-                icon={<Icon as={icon} />}
-                onClick={onIdeaLike}
-                color={liked ? "red.500" : "black"}
-              />
-            </Flex>
-
-            <RichTextContainer>
-              <EditorWrapper editorValue={data[iterator].richDescription} />
-            </RichTextContainer>
-          </Flex>
+          <FullIdea data={data[ideaIndex]} />
 
           <SideHelper>
             <ArrowButton
               aria-label="Right"
               icon={<Icon as={BiRightArrowAlt} />}
-              disabled={nextDisabled}
-              onClick={getNextIdea}
+              onClick={() => paginate(1)}
             />
           </SideHelper>
         </Flex>
@@ -112,37 +74,39 @@ export default function Explore() {
 }
 
 const MainContainer = ({
-  back,
-  iterator,
+  direction,
+  page,
   children,
 }: {
-  back: boolean;
+  direction: number;
+  page: number;
   children: ReactNode;
-  iterator: number;
 }) => {
   const MotionFlex = motion.custom(Flex);
 
   const variants = {
-    initial: (back: boolean) => {
+    enter: (direction: number) => {
       return {
-        x: back ? 1000 : -1000,
+        x: direction > 0 ? 1000 : -1000,
         opacity: 0,
       };
     },
-    visible: {
+    center: {
+      zIndex: 1,
       x: 0,
       opacity: 1,
     },
-    exit: (back: boolean) => {
+    exit: (direction: number) => {
       return {
-        x: back ? -1000 : +1000,
+        zIndex: 0,
+        x: direction < 0 ? 1000 : -1000,
         opacity: 0,
       };
     },
   };
 
   return (
-    <AnimatePresence initial={false} custom={back}>
+    <AnimatePresence initial={false} custom={direction}>
       <MotionFlex
         borderTop="4px solid red"
         w="full"
@@ -150,14 +114,14 @@ const MainContainer = ({
         align="center"
         justify="start"
         variants={variants}
-        key={iterator}
-        initial="initial"
-        animate="visible"
+        key={page}
+        initial="enter"
+        animate="center"
         exit="exit"
         pos="fixed"
         transition={{
           x: { type: "spring", stiffness: 300, damping: 30 },
-          opacity: { duration: 0.2 },
+          opacity: { duration: 0.1 },
         }}
       >
         {children}

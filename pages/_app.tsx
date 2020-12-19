@@ -1,4 +1,5 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { FavContextProvider } from "../src/contexts/FavoritesContext";
 import { AuthProvider } from "../src/firebaseLib/auth";
 
 const colors = {
@@ -13,9 +14,11 @@ const theme = extendTheme({ colors });
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <FavContextProvider>
+        <ChakraProvider theme={theme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </FavContextProvider>
     </AuthProvider>
   );
 }

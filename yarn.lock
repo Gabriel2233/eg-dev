@@ -4744,6 +4744,16 @@ popmotion@9.0.0-rc.20:
     style-value-types "^3.1.9"
     tslib "^1.10.0"
 
+popmotion@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/popmotion/-/popmotion-9.0.1.tgz#63657089c124ffad500c45e6eb20b8e3cca919af"
+  integrity sha512-pXBHRaLz/WBlatXb0ADPGXksqr24z24z1H2/xTtsin9E6dJ0bGK1nWyZpcvdjDIIf8XxAkbf3/FN3JxayVmFbQ==
+  dependencies:
+    framesync "^4.1.0"
+    hey-listen "^1.0.8"
+    style-value-types "^3.1.9"
+    tslib "^1.10.0"
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"

@@ -1,8 +1,10 @@
 import {
   Badge,
+  Button,
   Flex,
   FlexProps,
   Heading,
+  Icon,
   IconButton,
   IconButtonProps,
   Link as ChakraLink,
@@ -12,7 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { AiFillHeart } from "react-icons/ai";
+import { FiHeart } from "react-icons/fi";
 import { DbIdea } from "../../types/types";
+import { useFavorites } from "../contexts/FavoritesContext";
 import { ReadOnlyEditor } from "./ReadOnlyEditor";
 
 export const IdeaIdentifier = ({ data }: { data: DbIdea }) => {
@@ -120,7 +126,7 @@ export const IdeaInfoSection = ({ data }: { data: DbIdea }) => {
         </Text>
 
         {data.techs.map((tech: string, i: number) => (
-          <AnimatePresence custom={i}>
+          <AnimatePresence custom={i} key={i}>
             <TechListItem tech={tech} />
           </AnimatePresence>
         ))}
@@ -137,6 +143,46 @@ export const IdeaInfoSection = ({ data }: { data: DbIdea }) => {
           </Text>
         )}
       </Flex>
+    </Flex>
+  );
+};
+
+export const FullIdea = ({ data }: { data: DbIdea }) => {
+  const { favorites, onIdeaLike } = useFavorites();
+
+  const checkPresence = () => {
+    return favorites.includes(data.id);
+  };
+
+  const [isFavorited, setIsFavorited] = useState(null);
+
+  useEffect(() => {
+    const value = checkPresence();
+
+    if (value) {
+      setIsFavorited(true);
+    } else {
+      setIsFavorited(false);
+    }
+  }, [favorites]);
+
+  return (
+    <Flex width="70%" p={8} flexDir="column">
+      <IdeaIdentifier data={data} />
+
+      <Flex w="full" justify="space-between">
+        <IdeaInfoSection data={data} />
+        <Button size="md" onClick={() => onIdeaLike(data.id)}>
+          <Icon
+            as={isFavorited ? AiFillHeart : FiHeart}
+            color={isFavorited ? "red.500" : "black"}
+          />{" "}
+        </Button>
+      </Flex>
+
+      <RichTextContainer>
+        <EditorWrapper editorValue={data.richDescription} />
+      </RichTextContainer>
     </Flex>
   );
 };

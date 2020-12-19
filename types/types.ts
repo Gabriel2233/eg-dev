@@ -54,3 +54,17 @@ export type DbIdea = {
   user: AppUser;
   userUid: string;
 };
+
+export type IdeaWithFavorite = {
+  id: number;
+  name: string;
+  briefDescription: string;
+  richDescription: string;
+  difficulty: string;
+  techs: Array<string>;
+  demo_url?: string;
+  demo_placeholder?: string;
+  user: AppUser;
+  userUid: string;
+  favorited: boolean;
+};
