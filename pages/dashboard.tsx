@@ -16,6 +16,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Heading,
+  Select,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import { useAuth } from "../src/firebaseLib/auth";
@@ -28,26 +30,92 @@ import { FiShare, FiTrash } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 
 import Link from "next/link";
+import { TableSkeleton } from "../src/components/TableSkeleton";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useFavorites } from "../src/contexts/FavoritesContext";
+
+type TSelect = {
+  dataType: string;
+};
 
 export default function Dashboard() {
   const { user } = useAuth();
 
-  const { data, error } = useSWR<DbIdea[]>(
-    !user ? null : ["/api/ideas/get-my-ideas", user.uid],
-    fetcher
-  );
+  const { register, handleSubmit, errors } = useForm<TSelect>();
 
-  if (error) return "error";
+  const { favorites } = useFavorites();
+
+  const [currentApiCall, setCurrentApiCall] = useState<string>("get-my-ideas");
+
+  const toggleVisualization = (data: TSelect) => {
+    setCurrentApiCall(data["dataType"]);
+  };
+
+  const [data, setData] = useState<DbIdea[]>([]);
+
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function getAproppiateDataType() {
+      setDataLoading(true);
+
+      if (currentApiCall === "get-my-ideas") {
+        const res = await fetch(`/api/ideas/${currentApiCall}`);
+
+        const data = await res.json();
+
+        setData(data);
+      } else {
+        const res = await fetch(
+          `/api/ideas/${currentApiCall}?favs=${favorites}`
+        );
+
+        const data = await res.json();
+
+        setData(data);
+      }
+
+      setDataLoading(false);
+    }
+
+    getAproppiateDataType();
+  }, [currentApiCall]);
 
   return (
     <Box bg="gray.100" h="100vh">
       <DashboardHeader />
 
-      <Flex w="full" align="center" justify="center" mt="3rem">
-        {!data ? (
-          <h1>Loading</h1>
+      <Flex align="center" justify="space-between" p={8}>
+        <Heading
+          size="lg"
+          as={motion.h1}
+          initial={{ opacity: 0, x: -400 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0 }}
+        >
+          {currentApiCall === "get-my-favorites" ? "My Favorites" : "My Ideas"}
+        </Heading>
+
+        <Select
+          bg="white"
+          w="200px"
+          color="gray.600"
+          defaultValue="My Ideas"
+          ref={register}
+          onClick={handleSubmit(toggleVisualization)}
+          name="dataType"
+        >
+          <option value="get-my-ideas">My Ideas</option>
+          <option value="get-my-favorites">Favorites</option>
+        </Select>
+      </Flex>
+
+      <Flex w="full" align="center" justify="center" mt={8}>
+        {dataLoading ? (
+          <TableSkeleton />
         ) : (
-          <Table size="md" p={8} bg="white" w="80%" rounded="10px">
+          <Table size="md" p={8} bg="white" w="80%">
             <Thead bg="gray.200">
               <Tr>
                 <Th>Idea Name</Th>
@@ -75,7 +143,6 @@ const TableItem = ({ idea }: { idea: DbIdea }) => {
   return (
     <>
       <Tr
-        overflow="hidden"
         cursor="pointer"
         key={idea.id}
         as={motion.tr}
@@ -85,9 +152,9 @@ const TableItem = ({ idea }: { idea: DbIdea }) => {
         background="white"
       >
         <Td fontWeight="bold">
-          <ChakraLink>
-            <Link href={`/ideas/${idea.id}`}>{idea.name}</Link>
-          </ChakraLink>
+          <Link href={`/ideas/${idea.id}`}>
+            <ChakraLink>{idea.name}</ChakraLink>
+          </Link>
         </Td>
         <Td>
           <Badge
@@ -106,8 +173,8 @@ const TableItem = ({ idea }: { idea: DbIdea }) => {
           {idea.demo_url ? (
             <>
               <Icon as={HiCheckCircle} fontSize="20px" color="green.500" />
-              <Link href={idea.demo_url} mx={4}>
-                Access
+              <Link href={idea.demo_url}>
+                <ChakraLink ml={2}>Access</ChakraLink>
               </Link>
             </>
           ) : (

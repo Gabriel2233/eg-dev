@@ -1,4 +1,4 @@
-import { Flex, Grid } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 export const RichToolbar = ({ children }: { children: ReactNode }) => {
@@ -10,7 +10,7 @@ export const RichToolbar = ({ children }: { children: ReactNode }) => {
       align="center"
       justify="start"
       p={2}
-      background="gray.200"
+      borderWidth={1}
     >
       {children}
     </Grid>

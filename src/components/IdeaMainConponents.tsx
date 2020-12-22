@@ -172,7 +172,12 @@ export const FullIdea = ({ data }: { data: DbIdea }) => {
 
       <Flex w="full" justify="space-between">
         <IdeaInfoSection data={data} />
-        <Button size="md" onClick={() => onIdeaLike(data.id)}>
+        <Button
+          size="md"
+          variant="ghost"
+          colorScheme="red"
+          onClick={() => onIdeaLike(data.id)}
+        >
           <Icon
             as={isFavorited ? AiFillHeart : FiHeart}
             color={isFavorited ? "red.500" : "black"}

@@ -1,7 +1,7 @@
 import { Box, CloseButton, Flex, Icon, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { AiOutlineCode } from "react-icons/ai";
+import { AiFillCode } from "react-icons/ai";
 import { Node } from "slate";
 import { IdeaCreationForm } from "../src/components/IdeaCreationForm";
 import { useAuth } from "../src/firebaseLib/auth";
@@ -19,8 +19,7 @@ export default function NewIdeaCreator() {
       type: "paragraph",
       children: [
         {
-          text:
-            "How will the app work? What are some tips and tricks to make this idea become reality...",
+          text: "Describe your app. In a rich way :)",
         },
       ],
     },
@@ -63,13 +62,13 @@ export default function NewIdeaCreator() {
         method: "POST",
         body: JSON.stringify(body),
       });
-      const data = await res.json();
-
-      toast({
-        title: "Success!",
-        status: "success",
-        duration: 2000,
-      });
+      if (res.ok) {
+        toast({
+          title: "Success!",
+          status: "success",
+          duration: 2000,
+        });
+      }
     } catch (err) {
       toast({
         title: "Error :(",
@@ -91,7 +90,7 @@ export default function NewIdeaCreator() {
         borderTopColor="red.400"
       >
         <Flex align="center">
-          <Icon as={AiOutlineCode} mx={4} fontSize="33px" />
+          <Icon as={AiFillCode} mx={4} fontSize="33px" />
           Create a new Idea
         </Flex>
 

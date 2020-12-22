@@ -1,8 +1,11 @@
 import { Avatar, Flex, Icon, Link as ChakraLink } from "@chakra-ui/react";
 import Link from "next/link";
-import { AiOutlineCode } from "react-icons/ai";
+import { AiFillCode } from "react-icons/ai";
+import { useAuth } from "../firebaseLib/auth";
 
 export const DashboardHeader = () => {
+  const { user } = useAuth();
+
   return (
     <Flex
       w="full"
@@ -17,7 +20,9 @@ export const DashboardHeader = () => {
     >
       <Flex align="center">
         <Link href="/dashboard">
-          <Icon cursor="pointer" as={AiOutlineCode} mx={1} fontSize="33px" />
+          <div>
+            <Icon cursor="pointer" as={AiFillCode} mx={1} fontSize="33px" />
+          </div>
         </Link>
 
         <Link href="/explore">
@@ -29,16 +34,12 @@ export const DashboardHeader = () => {
         <Link href="/new-idea">
           <ChakraLink size="sm">Create</ChakraLink>
         </Link>
-
-        <Link href="/new-idea">
-          <ChakraLink size="sm" mx={4}>
-            Favorites
-          </ChakraLink>
-        </Link>
       </Flex>
 
       <Flex align="center">
-        <Avatar size="sm" />
+        <Link href="/profile">
+          <Avatar size="sm" cursor="pointer" src={user.photoUrl} />
+        </Link>
       </Flex>
     </Flex>
   );

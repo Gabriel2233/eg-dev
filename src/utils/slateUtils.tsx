@@ -117,11 +117,7 @@ const BlockButton = ({ format, icon }: { format: string; icon: IconType }) => {
       }}
       size="sm"
       mr={3}
-      bg="white"
-      borderWidth={2}
-      fontSize="lg"
-      borderColor="gray.200"
-      _hover={{ bg: "white", borderColor: "red.400" }}
+      variant="ghost"
     >
       <Icon as={icon} />
     </Button>
@@ -135,13 +131,10 @@ const MarkButton = ({ format, icon }: { format: string; icon: IconType }) => {
       onClick={() => {
         toggleMark(editor, format);
       }}
+      variant="ghost"
       size="sm"
       mr={3}
-      bg="white"
-      borderWidth={2}
       fontSize="sm"
-      borderColor="gray.200"
-      _hover={{ bg: "white", borderColor: "red.400" }}
     >
       <Icon as={icon} />
     </Button>

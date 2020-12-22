@@ -1,5 +1,5 @@
 import { Button, Flex, Icon } from "@chakra-ui/react";
-import { useState, ReactNode, useEffect } from "react";
+import { useState, ReactNode } from "react";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
 
 import { Scrollbars } from "react-custom-scrollbars";
@@ -8,20 +8,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { wrap } from "popmotion";
 import { SideHelper } from "../src/components/SideHelper";
 
-import {
-  ArrowButton,
-  EditorWrapper,
-  FullIdea,
-  IdeaIdentifier,
-  IdeaInfoSection,
-  RichTextContainer,
-} from "../src/components/IdeaMainConponents";
+import { ArrowButton, FullIdea } from "../src/components/IdeaMainConponents";
 import useSWR from "swr";
 import { DbIdea } from "../types/types";
 import { fetcher } from "../src/utils/fetcher";
 import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
-import { useFavorites } from "../src/contexts/FavoritesContext";
-import { FiArrowLeft, FiHeart } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { useRouter } from "next/router";
 
 const TAKE = 100;
