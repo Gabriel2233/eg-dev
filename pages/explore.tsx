@@ -13,8 +13,10 @@ import useSWR from "swr";
 import { DbIdea } from "../types/types";
 import { fetcher } from "../src/utils/fetcher";
 import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
-import { FiArrowLeft } from "react-icons/fi";
+import { GoChevronLeft } from "react-icons/go";
 import { useRouter } from "next/router";
+import { AiFillCode } from "react-icons/ai";
+import { MobileNav } from "../src/components/MobileNav";
 
 const TAKE = 100;
 
@@ -37,11 +39,21 @@ export default function Explore() {
   return (
     <MainContainer direction={direction} page={page}>
       <Scrollbars>
-        <Flex>
+        <Flex flexDir={["column", "column", "row"]}>
+          <Flex w="full" background="red.500" p={6}>
+            safdsa
+          </Flex>
+
           <SideHelper>
-            <Button pos="fixed" top={0} m={6} onClick={() => router.back()}>
-              <Icon as={FiArrowLeft} mr={2} />
-              Back
+            <Button
+              pos="fixed"
+              top={0}
+              m={6}
+              onClick={() => router.back()}
+              variant="ghost"
+            >
+              <Icon as={GoChevronLeft} mr={2} />
+              <Icon as={AiFillCode} fontSize="33px" />
             </Button>
             <ArrowButton
               aria-label="Left"
@@ -49,9 +61,7 @@ export default function Explore() {
               onClick={() => paginate(-1)}
             />
           </SideHelper>
-
           <FullIdea data={data[ideaIndex]} />
-
           <SideHelper>
             <ArrowButton
               aria-label="Right"
@@ -100,7 +110,6 @@ const MainContainer = ({
   return (
     <AnimatePresence initial={false} custom={direction}>
       <MotionFlex
-        borderTop="4px solid red"
         w="full"
         h="full"
         align="center"
@@ -115,6 +124,7 @@ const MainContainer = ({
           x: { type: "spring", stiffness: 300, damping: 30 },
           opacity: { duration: 0.1 },
         }}
+        zIndex={-2}
       >
         {children}
       </MotionFlex>

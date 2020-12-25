@@ -67,13 +67,17 @@ export default function Dashboard() {
 
         setData(data);
       } else {
-        const res = await fetch(
-          `/api/ideas/${currentApiCall}?favs=${favorites}`
-        );
+        if (favorites.length > 0) {
+          const res = await fetch(
+            `/api/ideas/${currentApiCall}?favs=${favorites}`
+          );
 
-        const data = await res.json();
+          const data = await res.json();
 
-        setData(data);
+          setData(data);
+        } else {
+          setData([]);
+        }
       }
 
       setDataLoading(false);
@@ -83,7 +87,7 @@ export default function Dashboard() {
   }, [currentApiCall]);
 
   return (
-    <Box bg="gray.100" h="100vh">
+    <Box h="100vh" bg="gray.100" w="100vw">
       <DashboardHeader />
 
       <Flex align="center" justify="space-between" p={8}>
@@ -112,32 +116,40 @@ export default function Dashboard() {
       </Flex>
 
       <Flex w="full" align="center" justify="center" mt={8}>
-        {dataLoading ? (
-          <TableSkeleton />
-        ) : (
-          <Table size="md" p={8} bg="white" w="80%">
-            <Thead bg="gray.200">
-              <Tr>
-                <Th>Idea Name</Th>
-                <Th>Difficulty</Th>
-                <Th>Demo Available</Th>
-                <Th>Info</Th>
-              </Tr>
-            </Thead>
-
-            <Tbody>
-              {data.map((idea, i) => (
-                <AnimatePresence custom={i}>
-                  <TableItem idea={idea} />
-                </AnimatePresence>
-              ))}
-            </Tbody>
-          </Table>
-        )}
+        {dataLoading ? <TableSkeleton /> : <IdeaTable data={data} />}
       </Flex>
     </Box>
   );
 }
+
+const IdeaTable = ({ data }: { data: DbIdea[] }) => {
+  return (
+    <>
+      {data.length === 0 ? (
+        "Empty"
+      ) : (
+        <Table size="md" p={[0, null, 8]} bg="white" w="80%">
+          <Thead bg="gray.200">
+            <Tr>
+              <Th>Idea Name</Th>
+              <Th>Difficulty</Th>
+              <Th>Demo Available</Th>
+              <Th>Info</Th>
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {data.map((idea, i) => (
+              <AnimatePresence custom={i} key={i}>
+                <TableItem idea={idea} />
+              </AnimatePresence>
+            ))}
+          </Tbody>
+        </Table>
+      )}
+    </>
+  );
+};
 
 const TableItem = ({ idea }: { idea: DbIdea }) => {
   return (

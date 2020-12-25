@@ -14,13 +14,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .map((string) => parseInt(string));
 
     const favorites = await prisma.idea.findMany({
-      where: { id: { in: favsArray } },
+      where: { id: favsArray.length === 0 ? { in: [-1] } : { in: favsArray } },
     });
 
     await prisma.$disconnect();
 
     return res.status(201).json(favorites);
   } catch (err) {
-    return res.json({ message: "err.message" });
+    return res.json({ message: err.message });
   }
 };

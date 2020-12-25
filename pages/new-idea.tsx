@@ -86,8 +86,6 @@ export default function NewIdeaCreator() {
         align="center"
         justify="space-between"
         p={4}
-        borderTopWidth={4}
-        borderTopColor="red.400"
       >
         <Flex align="center">
           <Icon as={AiFillCode} mx={4} fontSize="33px" />

@@ -6,6 +6,8 @@ import { useAuth } from "../firebaseLib/auth";
 export const DashboardHeader = () => {
   const { user } = useAuth();
 
+  const loading = user === null;
+
   return (
     <Flex
       w="full"
@@ -38,7 +40,7 @@ export const DashboardHeader = () => {
 
       <Flex align="center">
         <Link href="/profile">
-          <Avatar size="sm" cursor="pointer" src={user.photoUrl} />
+          <Avatar size="sm" cursor="pointer" src={!loading && user.photoUrl} />
         </Link>
       </Flex>
     </Flex>

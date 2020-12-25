@@ -31,7 +31,7 @@ export const IdeaIdentifier = ({ data }: { data: DbIdea }) => {
 
   return (
     <Flex align="center" justify="space-between" w="full">
-      <Heading size="2xl" py={6}>
+      <Heading fontSize={["30px", "40px", "50px"]} py={6}>
         {data.name}
       </Heading>
 
@@ -167,7 +167,7 @@ export const FullIdea = ({ data }: { data: DbIdea }) => {
   }, [favorites]);
 
   return (
-    <Flex width="70%" p={8} flexDir="column">
+    <Flex width={["100%", null, "70%"]} p={[2, null, 8]} flexDir="column">
       <IdeaIdentifier data={data} />
 
       <Flex w="full" justify="space-between">
