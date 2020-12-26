@@ -1,4 +1,10 @@
-import { Avatar, Flex, Icon, Link as ChakraLink } from "@chakra-ui/react";
+import {
+  Avatar,
+  Button,
+  Flex,
+  Icon,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { AiFillCode } from "react-icons/ai";
 import { useAuth } from "../firebaseLib/auth";
@@ -15,8 +21,6 @@ export const DashboardHeader = () => {
       justify="space-between"
       p={4}
       backgroundColor="white"
-      borderTopWidth={4}
-      borderTopColor="red.400"
       borderBottomWidth={1}
       borderBottomColor="gray.200"
     >
@@ -26,19 +30,28 @@ export const DashboardHeader = () => {
             <Icon cursor="pointer" as={AiFillCode} mx={1} fontSize="33px" />
           </div>
         </Link>
-
-        <Link href="/explore">
-          <ChakraLink size="sm" mx={4}>
-            Explore
-          </ChakraLink>
-        </Link>
-
-        <Link href="/new-idea">
-          <ChakraLink size="sm">Create</ChakraLink>
-        </Link>
       </Flex>
 
       <Flex align="center">
+        <Link href="/explore">
+          <Button size="sm" mx={2}>
+            Explore
+          </Button>
+        </Link>
+
+        <Link href="/new-idea">
+          <Button
+            size="sm"
+            mx={2}
+            mr={4}
+            bg="red.500"
+            _hover={{ bg: "red.400" }}
+            color="white"
+          >
+            Create
+          </Button>
+        </Link>
+
         <Link href="/profile">
           <Avatar size="sm" cursor="pointer" src={!loading && user.photoUrl} />
         </Link>

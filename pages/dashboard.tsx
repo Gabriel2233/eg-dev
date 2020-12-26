@@ -109,6 +109,7 @@ export default function Dashboard() {
           ref={register}
           onClick={handleSubmit(toggleVisualization)}
           name="dataType"
+          _focus={{ borderColor: "gray.200" }}
         >
           <option value="get-my-ideas">My Ideas</option>
           <option value="get-my-favorites">Favorites</option>

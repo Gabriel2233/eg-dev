@@ -7,6 +7,7 @@ import { AiFillCode } from "react-icons/ai";
 import { GoChevronLeft } from "react-icons/go";
 import { ExploreSkeleton } from "../../src/components/ExploreSkeleton";
 import { FullIdea } from "../../src/components/IdeaMainConponents";
+import { MobileNav } from "../../src/components/MobileNav";
 import { getPrisma } from "../../src/utils/prismaUtils";
 import { DbIdea } from "../../types/types";
 
@@ -29,28 +30,23 @@ const AnimatedBox = ({ children }: { children: ReactNode }) => {
 
   return (
     <AnimatePresence>
-      <>
-        <Flex w="full" p={4} pos="fixed" top={0} background="white">
-          <Button onClick={() => router.back()}>
-            <Icon as={GoChevronLeft} mr={2} />
-            <Icon as={AiFillCode} fontSize="20px" />
-          </Button>
-        </Flex>
-        <MotionBox
-          mt="4rem"
-          d="flex"
-          justifyContent="center"
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-          transition={{
-            y: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.5 },
-          }}
-        >
-          {children}
-        </MotionBox>
-      </>
+      <Button pos="fixed" top={0} left={0} m={6} onClick={() => router.back()}>
+        <Icon as={GoChevronLeft} mr={2} />
+        <Icon as={AiFillCode} fontSize="30px" />
+      </Button>
+      <MotionBox
+        d="flex"
+        justifyContent="center"
+        variants={variants}
+        initial="hidden"
+        animate="visible"
+        transition={{
+          y: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.5 },
+        }}
+      >
+        {children}
+      </MotionBox>
     </AnimatePresence>
   );
 };
@@ -60,6 +56,7 @@ export default function Idea({ ideaData }: { ideaData: DbIdea }) {
 
   return (
     <AnimatedBox>
+      <MobileNav>{}</MobileNav>
       <FullIdea data={ideaData} />
     </AnimatedBox>
   );

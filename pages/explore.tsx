@@ -1,5 +1,5 @@
-import { Button, Flex, Icon } from "@chakra-ui/react";
-import { useState, ReactNode } from "react";
+import { Button, Flex, Icon, IconButton } from "@chakra-ui/react";
+import { useState, ReactNode, createElement } from "react";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
 
 import { Scrollbars } from "react-custom-scrollbars";
@@ -21,11 +21,13 @@ import { MobileNav } from "../src/components/MobileNav";
 const TAKE = 100;
 
 export default function Explore() {
+  const router = useRouter();
+
   const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
 
   const { error, data } = useSWR<DbIdea[]>(["/api/ideas/get", TAKE], fetcher);
 
-  if (!data) return <ExploreSkeleton />;
+  if (!data) return createElement(ExploreSkeleton);
   if (error) return "Error...";
 
   const ideaIndex = wrap(0, data.length, page);
@@ -34,15 +36,27 @@ export default function Explore() {
     setPage([page + newDirection, newDirection]);
   };
 
-  const router = useRouter();
-
   return (
     <MainContainer direction={direction} page={page}>
       <Scrollbars>
         <Flex flexDir={["column", "column", "row"]}>
-          <Flex w="full" background="red.500" p={6}>
-            safdsa
-          </Flex>
+          <MobileNav>
+            <IconButton
+              aria-label="Left"
+              onClick={() => paginate(-1)}
+              isRound={true}
+              mx={1}
+              icon={<Icon as={BiLeftArrowAlt} />}
+            />
+
+            <IconButton
+              aria-label="Right"
+              onClick={() => paginate(1)}
+              isRound={true}
+              mx={1}
+              icon={<Icon as={BiRightArrowAlt} />}
+            />
+          </MobileNav>
 
           <SideHelper>
             <Button
@@ -61,7 +75,9 @@ export default function Explore() {
               onClick={() => paginate(-1)}
             />
           </SideHelper>
+
           <FullIdea data={data[ideaIndex]} />
+
           <SideHelper>
             <ArrowButton
               aria-label="Right"
@@ -124,7 +140,6 @@ const MainContainer = ({
           x: { type: "spring", stiffness: 300, damping: 30 },
           opacity: { duration: 0.1 },
         }}
-        zIndex={-2}
       >
         {children}
       </MotionFlex>

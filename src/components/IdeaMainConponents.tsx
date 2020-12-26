@@ -65,7 +65,7 @@ export const TechListItem = ({ tech }: { tech: string }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <TagLabel># {tech}</TagLabel>
+      <TagLabel>{tech}</TagLabel>
     </Tag>
   );
 };
@@ -167,7 +167,12 @@ export const FullIdea = ({ data }: { data: DbIdea }) => {
   }, [favorites]);
 
   return (
-    <Flex width={["100%", null, "70%"]} p={[2, null, 8]} flexDir="column">
+    <Flex
+      width={["100%", null, "70%"]}
+      p={[2, null, 8]}
+      flexDir="column"
+      my={["4rem", null, null]}
+    >
       <IdeaIdentifier data={data} />
 
       <Flex w="full" justify="space-between">
