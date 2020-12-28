@@ -3,16 +3,65 @@ import {
   Button,
   Flex,
   Icon,
-  Link as ChakraLink,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Kbd,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { AiFillCode } from "react-icons/ai";
+import {
+  HTMLAttributes,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { AiFillCode, AiOutlineSearch } from "react-icons/ai";
 import { useAuth } from "../firebaseLib/auth";
+
+const useSearchFocus = (targetKey: string) => {
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (targetKey === e.key) {
+        setIsFocused(true);
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (targetKey === e.key) {
+        setIsFocused(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+  return isFocused;
+};
 
 export const DashboardHeader = () => {
   const { user } = useAuth();
 
   const loading = user === null;
+
+  const slashFocus = useSearchFocus("/");
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (slashFocus) {
+      inputRef.current.focus();
+    }
+  }, [slashFocus]);
 
   return (
     <Flex
@@ -30,6 +79,22 @@ export const DashboardHeader = () => {
             <Icon cursor="pointer" as={AiFillCode} mx={1} fontSize="33px" />
           </div>
         </Link>
+      </Flex>
+
+      <Flex align="center" w="50%">
+        <InputGroup>
+          <InputLeftElement
+            children={<Icon as={AiOutlineSearch} color="gray.500" />}
+          />
+          <Input
+            ref={inputRef}
+            w="full"
+            placeholder="Search for some fresh ideas :)"
+            _focus={{ borderColor: "red.500" }}
+          />
+
+          <InputRightElement children={<Kbd color="gray.700">/</Kbd>} />
+        </InputGroup>
       </Flex>
 
       <Flex align="center">
