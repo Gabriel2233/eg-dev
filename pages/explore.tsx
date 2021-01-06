@@ -1,22 +1,21 @@
-import { Button, Flex, Icon, IconButton } from "@chakra-ui/react";
-import { useState, ReactNode, createElement } from "react";
-import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
+import { Button, Flex, Icon, IconButton, Spinner } from '@chakra-ui/react';
+import { useState, ReactNode, createElement } from 'react';
+import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
-import { Scrollbars } from "react-custom-scrollbars";
+import { Scrollbars } from 'react-custom-scrollbars';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { wrap } from "popmotion";
-import { SideHelper } from "../src/components/SideHelper";
+import { AnimatePresence, motion } from 'framer-motion';
+import { wrap } from 'popmotion';
+import { SideHelper } from '../src/components/SideHelper';
 
-import { ArrowButton, FullIdea } from "../src/components/IdeaMainConponents";
-import useSWR from "swr";
-import { DbIdea } from "../types/types";
-import { fetcher } from "../src/utils/fetcher";
-import { ExploreSkeleton } from "../src/components/ExploreSkeleton";
-import { GoChevronLeft } from "react-icons/go";
-import { useRouter } from "next/router";
-import { AiFillCode } from "react-icons/ai";
-import { MobileNav } from "../src/components/MobileNav";
+import { ArrowButton, FullIdea } from '../src/components/IdeaMainConponents';
+import useSWR from 'swr';
+import { DbIdea } from '../types/types';
+import { fetcher } from '../src/utils/fetcher';
+import { GoChevronLeft } from 'react-icons/go';
+import { useRouter } from 'next/router';
+import { AiFillCode } from 'react-icons/ai';
+import { MobileNav } from '../src/components/MobileNav';
 
 const TAKE = 100;
 
@@ -25,10 +24,11 @@ export default function Explore() {
 
   const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
 
-  const { error, data } = useSWR<DbIdea[]>(["/api/ideas/get", TAKE], fetcher);
+  const { error, data } = useSWR<DbIdea[]>(['/api/ideas/get', TAKE], fetcher);
 
-  if (!data) return createElement(ExploreSkeleton);
-  if (error) return "Error...";
+  if (!data)
+    return <Spinner thickness="4px" emptyColor="gray.200" color="red.500" />;
+  if (error) return 'Error...';
 
   const ideaIndex = wrap(0, data.length, page);
 
@@ -39,7 +39,7 @@ export default function Explore() {
   return (
     <MainContainer direction={direction} page={page}>
       <Scrollbars>
-        <Flex flexDir={["column", "column", "row"]}>
+        <Flex flexDir={['column', 'column', 'row']}>
           <MobileNav>
             <IconButton
               aria-label="Left"
@@ -137,7 +137,7 @@ const MainContainer = ({
         exit="exit"
         pos="fixed"
         transition={{
-          x: { type: "spring", stiffness: 300, damping: 30 },
+          x: { type: 'spring', stiffness: 300, damping: 30 },
           opacity: { duration: 0.1 },
         }}
       >

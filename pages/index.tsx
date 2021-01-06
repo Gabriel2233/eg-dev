@@ -1,24 +1,29 @@
-import { Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Icon, Text } from '@chakra-ui/react';
 
-import { Header } from "../src/components/Header";
-import { VerticalLayout } from "../src/components/VerticalLayout";
-import Link from "next/link";
-import { MainButton } from "../src/components/Button";
+import Link from 'next/link';
+import { MainButton } from '../src/components/Button';
+import { AiFillCode } from 'react-icons/ai';
 
 export default function Home() {
   return (
-    <VerticalLayout>
-      <Header>
-        <Link href="/login">
-          <Button p={4} mx={2}>
-            Login
-          </Button>
-        </Link>
+    <Box w="100vw" h="100vh">
+      <Flex w="full" align="center" justify="space-between" p={4}>
+        <Flex align="center" fontSize="24px">
+          <Icon as={AiFillCode} mr={2} fontSize="33px" />
+          <Text fontSize="24px">Eg-Dev</Text>
+        </Flex>
+        <Flex>
+          <Link href="/login">
+            <Button p={4} mx={2}>
+              Login
+            </Button>
+          </Link>
 
-        <Link href="/explore">
-          <MainButton>Explore</MainButton>
-        </Link>
-      </Header>
+          <Link href="/explore">
+            <MainButton>Explore</MainButton>
+          </Link>
+        </Flex>
+      </Flex>
 
       <Flex w="full" align="center" justify="center" flexDir="column" mt="4rem">
         <Heading size="xl" px={2} my={2}>
@@ -31,6 +36,6 @@ export default function Home() {
         </Text>
         <MainButton p={6}>Let's get Started!</MainButton>
       </Flex>
-    </VerticalLayout>
+    </Box>
   );
 }

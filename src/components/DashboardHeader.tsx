@@ -8,17 +8,18 @@ import {
   InputLeftElement,
   InputRightElement,
   Kbd,
-} from "@chakra-ui/react";
-import Link from "next/link";
+} from '@chakra-ui/react';
+import Link from 'next/link';
 import {
   HTMLAttributes,
   KeyboardEvent,
   useEffect,
   useRef,
   useState,
-} from "react";
-import { AiFillCode, AiOutlineSearch } from "react-icons/ai";
-import { useAuth } from "../firebaseLib/auth";
+} from 'react';
+import { AiFillCode, AiOutlineSearch } from 'react-icons/ai';
+import { useSearch } from '../contexts/SearchContext';
+import { useAuth } from '../firebaseLib/auth';
 
 const useSearchFocus = (targetKey: string) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -36,12 +37,12 @@ const useSearchFocus = (targetKey: string) => {
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
 
@@ -53,7 +54,7 @@ export const DashboardHeader = () => {
 
   const loading = user === null;
 
-  const slashFocus = useSearchFocus("/");
+  const slashFocus = useSearchFocus('/');
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -62,6 +63,14 @@ export const DashboardHeader = () => {
       inputRef.current.focus();
     }
   }, [slashFocus]);
+
+  const { onSearch, formUtils } = useSearch();
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSearch();
+    }
+  };
 
   return (
     <Flex
@@ -87,10 +96,15 @@ export const DashboardHeader = () => {
             children={<Icon as={AiOutlineSearch} color="gray.500" />}
           />
           <Input
-            ref={inputRef}
+            name="q"
+            ref={(e) => {
+              inputRef.current = e;
+              formUtils.register(e, { required: true });
+            }}
+            onKeyPress={handleKeyPress}
             w="full"
             placeholder="Search for some fresh ideas :)"
-            _focus={{ borderColor: "red.500" }}
+            _focus={{ borderColor: 'red.500' }}
           />
 
           <InputRightElement children={<Kbd color="gray.700">/</Kbd>} />
@@ -110,7 +124,7 @@ export const DashboardHeader = () => {
             mx={2}
             mr={4}
             bg="red.500"
-            _hover={{ bg: "red.400" }}
+            _hover={{ bg: 'red.400' }}
             color="white"
           >
             Create

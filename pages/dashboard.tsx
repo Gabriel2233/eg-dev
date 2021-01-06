@@ -1,4 +1,4 @@
-import { DashboardHeader } from "../src/components/DashboardHeader";
+import { DashboardHeader } from '../src/components/DashboardHeader';
 import {
   Table,
   Thead,
@@ -18,22 +18,20 @@ import {
   MenuItem,
   Heading,
   Select,
-} from "@chakra-ui/react";
-import useSWR from "swr";
-import { useAuth } from "../src/firebaseLib/auth";
-import { fetcher } from "../src/utils/fetcher";
-import { DbIdea } from "../types/types";
+  Spinner,
+} from '@chakra-ui/react';
+import { useAuth } from '../src/firebaseLib/auth';
+import { DbIdea } from '../types/types';
 
-import { HiCheckCircle, HiXCircle } from "react-icons/hi";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FiShare, FiTrash } from "react-icons/fi";
-import { AnimatePresence, motion } from "framer-motion";
+import { HiCheckCircle, HiXCircle } from 'react-icons/hi';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { FiShare, FiTrash } from 'react-icons/fi';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import Link from "next/link";
-import { TableSkeleton } from "../src/components/TableSkeleton";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useFavorites } from "../src/contexts/FavoritesContext";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useFavorites } from '../src/contexts/FavoritesContext';
 
 type TSelect = {
   dataType: string;
@@ -46,10 +44,10 @@ export default function Dashboard() {
 
   const { favorites } = useFavorites();
 
-  const [currentApiCall, setCurrentApiCall] = useState<string>("get-my-ideas");
+  const [currentApiCall, setCurrentApiCall] = useState<string>('get-my-ideas');
 
   const toggleVisualization = (data: TSelect) => {
-    setCurrentApiCall(data["dataType"]);
+    setCurrentApiCall(data['dataType']);
   };
 
   const [data, setData] = useState<DbIdea[]>([]);
@@ -60,7 +58,7 @@ export default function Dashboard() {
     async function getAproppiateDataType() {
       setDataLoading(true);
 
-      if (currentApiCall === "get-my-ideas") {
+      if (currentApiCall === 'get-my-ideas') {
         const res = await fetch(`/api/ideas/${currentApiCall}`);
 
         const data = await res.json();
@@ -98,7 +96,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0 }}
         >
-          {currentApiCall === "get-my-favorites" ? "My Favorites" : "My Ideas"}
+          {currentApiCall === 'get-my-favorites' ? 'My Favorites' : 'My Ideas'}
         </Heading>
 
         <Select
@@ -109,7 +107,7 @@ export default function Dashboard() {
           ref={register}
           onClick={handleSubmit(toggleVisualization)}
           name="dataType"
-          _focus={{ borderColor: "gray.200" }}
+          _focus={{ borderColor: 'gray.200' }}
         >
           <option value="get-my-ideas">My Ideas</option>
           <option value="get-my-favorites">Favorites</option>
@@ -117,7 +115,11 @@ export default function Dashboard() {
       </Flex>
 
       <Flex w="full" align="center" justify="center" mt={8}>
-        {dataLoading ? <TableSkeleton /> : <IdeaTable data={data} />}
+        {dataLoading ? (
+          <Spinner thickness="4px" emptyColor="gray.200" color="red.500" />
+        ) : (
+          <IdeaTable data={data} />
+        )}
       </Flex>
     </Box>
   );
@@ -127,14 +129,14 @@ const IdeaTable = ({ data }: { data: DbIdea[] }) => {
   return (
     <>
       {data.length === 0 ? (
-        "Empty"
+        'Empty'
       ) : (
         <Table size="md" p={[0, null, 8]} bg="white" w="80%">
           <Thead bg="gray.200">
             <Tr>
               <Th>Idea Name</Th>
-              <Th>Difficulty</Th>
-              <Th>Demo Available</Th>
+              <Th d={['none']}>Difficulty</Th>
+              <Th d={['none']}>Demo Available</Th>
               <Th>Info</Th>
             </Tr>
           </Thead>
@@ -169,20 +171,20 @@ const TableItem = ({ idea }: { idea: DbIdea }) => {
             <ChakraLink>{idea.name}</ChakraLink>
           </Link>
         </Td>
-        <Td>
+        <Td d={['none']}>
           <Badge
             colorScheme={
-              idea.difficulty === "Easy"
-                ? "green"
-                : idea.difficulty === "Intermediate"
-                ? "yellow"
-                : "red"
+              idea.difficulty === 'Easy'
+                ? 'green'
+                : idea.difficulty === 'Intermediate'
+                ? 'yellow'
+                : 'red'
             }
           >
             {idea.difficulty}
           </Badge>
         </Td>
-        <Td>
+        <Td d={['none']}>
           {idea.demo_url ? (
             <>
               <Icon as={HiCheckCircle} fontSize="20px" color="green.500" />

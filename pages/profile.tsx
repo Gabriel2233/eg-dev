@@ -8,13 +8,14 @@ import {
   Heading,
   Icon,
   Text,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { AiFillCode } from "react-icons/ai";
-import { FiArrowRight } from "react-icons/fi";
-import { useAuth } from "../src/firebaseLib/auth";
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { AiFillCode } from 'react-icons/ai';
+import { FiArrowRight } from 'react-icons/fi';
+import { useAuth } from '../src/firebaseLib/auth';
 
-import Link from "next/link";
+import Link from 'next/link';
+import { Header } from '../src/components/Header';
 
 export default function Profile() {
   const router = useRouter();
@@ -22,28 +23,15 @@ export default function Profile() {
   const { user, signOut, loading } = useAuth();
 
   return (
-    <Box w="full" h="full">
-      <Flex
-        w="full"
-        align="center"
-        justify="space-between"
-        p={4}
-        borderBottomWidth={2}
-        borderBottomColor="gray.200"
-      >
-        <Flex align="center">
-          <Icon as={AiFillCode} mr={2} fontSize="33px" />
-          My Account
-        </Flex>
-
-        <CloseButton onClick={() => router.back()} />
-      </Flex>
+    <Box h="100vh" bg="gray.100">
+      <Header text="My Account" />
 
       <Flex w="full" align="center" justify="center">
         {loading ? (
-          "Loading..."
+          'Loading...'
         ) : (
           <Flex
+            background="white"
             w="50%"
             align="start"
             flexDir="column"
@@ -61,7 +49,7 @@ export default function Profile() {
 
             <Grid
               w="full"
-              templateColumns={"repeat(auto-fit, minmax(60px, 1fr))"}
+              templateColumns={'repeat(auto-fit, minmax(60px, 1fr))'}
               align="center"
               p={2}
             >
@@ -81,7 +69,7 @@ export default function Profile() {
               <Button
                 bg="red.500"
                 color="white"
-                _hover={{ bg: "red.400" }}
+                _hover={{ bg: 'red.400' }}
                 onClick={signOut}
               >
                 Logout

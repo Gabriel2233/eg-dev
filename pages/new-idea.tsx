@@ -1,12 +1,13 @@
-import { Box, CloseButton, Flex, Icon, useToast } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { AiFillCode } from "react-icons/ai";
-import { Node } from "slate";
-import { IdeaCreationForm } from "../src/components/IdeaCreationForm";
-import { useAuth } from "../src/firebaseLib/auth";
-import { Idea, TechInput } from "../types/types";
-import { v4 as uuidv4 } from "uuid";
+import { Box, CloseButton, Flex, Icon, useToast } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { AiFillCode } from 'react-icons/ai';
+import { Node } from 'slate';
+import { IdeaCreationForm } from '../src/components/IdeaCreationForm';
+import { useAuth } from '../src/firebaseLib/auth';
+import { Idea, TechInput } from '../types/types';
+import { v4 as uuidv4 } from 'uuid';
+import { Header } from '../src/components/Header';
 
 export default function NewIdeaCreator() {
   const { back } = useRouter();
@@ -16,10 +17,10 @@ export default function NewIdeaCreator() {
 
   const [editorValue, setEditorValue] = useState<Node[]>([
     {
-      type: "paragraph",
+      type: 'paragraph',
       children: [
         {
-          text: "Describe your app. In a rich way :)",
+          text: 'Describe your app. In a rich way :)',
         },
       ],
     },
@@ -58,21 +59,21 @@ export default function NewIdeaCreator() {
     };
 
     try {
-      const res = await fetch("/api/ideas/create", {
-        method: "POST",
+      const res = await fetch('/api/ideas/create', {
+        method: 'POST',
         body: JSON.stringify(body),
       });
       if (res.ok) {
         toast({
-          title: "Success!",
-          status: "success",
+          title: 'Success!',
+          status: 'success',
           duration: 2000,
         });
       }
     } catch (err) {
       toast({
-        title: "Error :(",
-        status: "error",
+        title: 'Error :(',
+        status: 'error',
         duration: 2000,
       });
     }
@@ -80,20 +81,7 @@ export default function NewIdeaCreator() {
 
   return (
     <Box bg="gray.100" h="100vh">
-      <Flex
-        backgroundColor="white"
-        w="full"
-        align="center"
-        justify="space-between"
-        p={4}
-      >
-        <Flex align="center">
-          <Icon as={AiFillCode} mx={4} fontSize="33px" />
-          Create a new Idea
-        </Flex>
-
-        <CloseButton onClick={() => back()} mx={4} />
-      </Flex>
+      <Header text="Create a new Idea" />
 
       <Flex w="full" bg="gray.100" align="center" justify="center">
         <IdeaCreationForm

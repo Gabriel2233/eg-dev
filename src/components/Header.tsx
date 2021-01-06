@@ -1,16 +1,26 @@
-import { Flex, Heading, Icon } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { AiOutlineCode } from "react-icons/ai";
+import { CloseButton, Flex, Icon } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { AiFillCode } from 'react-icons/ai';
 
-export const Header = ({ children }: { children: ReactNode }) => {
+export const Header = ({ text }: { text: string }) => {
+  const router = useRouter();
+
   return (
-    <Flex w="full" p={6} align="center" justify="space-between">
+    <Flex
+      w="full"
+      align="center"
+      justify="space-between"
+      p={4}
+      borderBottomWidth={2}
+      borderBottomColor="gray.200"
+      background="white"
+    >
       <Flex align="center">
-        <Icon as={AiOutlineCode} mx={2} fontSize="33px" />
-        <Heading size="md">Eg-Dev</Heading>
+        <Icon as={AiFillCode} mr={2} fontSize="33px" />
+        {text}
       </Flex>
 
-      <Flex align="center">{children}</Flex>
+      <CloseButton onClick={() => router.back()} />
     </Flex>
   );
 };
